@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Generador de certificados de asistencia y cursos - Firmante reactivado</title>
+</head>
+<body>
+    {% include "header.html" %}
+    <h4>El firmante fue reactivado</h4>
+    <h4>En unos segundos volverás al panel de usuario. Si no ocurre, hacé click <a href="http://127.0.0.1:8000/company/choose_signee?id={{signee.course.id}}">acá</a></h4>
+    {% include "footer.html" %}
+</body>
+<script>
+    setTimeout(function () {
+        location.href = "/company/choose_signee?id={{signee.course.id}}"
+        }, 3000);
+</script>
+</html>

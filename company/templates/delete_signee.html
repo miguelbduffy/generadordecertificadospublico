@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELIMINAR FIRMANTE</title>
+</head>
+<body>
+    <h2>ELIMINAR FIRMANTE</h2>
+    <form action="{% url 'Signee deletion' %}" method="GET">
+        <input type="hidden" value="{{signee.id}}" name="delete_signee">
+        <input type="submit" value="SÍ, BORRAR"> <br>
+        <input type="button" value="NO, VOLVER ATRÁS" onclick="window.history.back();">  <br>
+    </form>
+</body>
+</html>
