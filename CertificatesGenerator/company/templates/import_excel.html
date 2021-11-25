@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Generador de certificados de asistencia y cursos - Importar planilla de Excel</title>
+    <style>
+        #red {
+            color:green;
+            font-weight: bold;
+        }
+        .inp{
+            margin-top: 3px;
+            margin-bottom: 3px;
+        }
+    </style>
+</head>
+<body>
+    {% include "header.html" %}
+    <h4>PASO 4: IMPORTAR PLANILLA</h4>
+    <p><b>IMPORTANTE: </b>El Excel debe contener los mismos encabezados de <a href="https://docs.google.com/spreadsheets/d/1pp--TSwd212LJT44RFSaHHjuqRhfHFWhukkkCSpWqlE/edit?usp=sharing" target="_blank"><strong>este archivo</strong></a>, todas las celdas deben estar completas, tener el formato "solo texto" y tiene la extensión del archivo tiene que ser ".xls" o ".xlsx". Puede que demore varios segundos en enviarse los certificados.</p>
+    <form onsubmit="return emptyFile()" action="{% url 'Import Excel' %}?course_id={{request.GET.course_id}}{% for s in signee %}&signee={{s}}{% endfor %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+        <input type="file" class="inp" name="excel" id="excel" accept=".xlsx, .xls, .csv"><br>
+        <input type="submit" class="inp" name="submit" value="IMPORTAR EXCEL" onsubmit="return uploadFile()">
+    </form>
+    {% if url %}
+    <p id="red">El envío de los certificados se realizó con éxito.</p>
+    {% endif %}
+ 
+<script>
+function checkfile(sender) {
+    var validExts = new Array(".xlsx", ".xls", ".csv");
+    var fileExt = sender.value;
+    fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
+    if (validExts.indexOf(fileExt) < 0) {
+        $("#excel").val("")
+      alert("Formato inválido. Los formatos válidos son: " +
+               validExts.toString()+".");
+      return false;
+    }
+    else return true;
+}
+</script>
+
+<script>   
+var uploadFile = document.getElementById("excel");
+uploadFile.onchange = function() {
+    if(this.files[0].size > 2000000){
+       alert("El peso máximo es de 2 megas.");
+       this.value = "";
+       return false;
+    }
+    checkfile(uploadFile)
+};
+</script>
+
+<script>
+    function emptyFile(){
+        
+        var excelFileLength = $("#excel")[0].files.length;
+            if(excelFileLength === 0){
+            alert("¡Tenés que subir un archivo!");
+            return false
+        }
+        return true
+    }
+        
+</script>
+{% include "footer.html" %}
+
+</body>
+</html>

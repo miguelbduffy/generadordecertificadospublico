@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de certificados de asistencia y cursos - Creá tu curso</title>
+    <style>
+        #in{
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .inp{
+            margin-top: 3px;
+            margin-bottom: 3px;
+        }
+    </style>
+</head>
+<body>
+    {% include "header.html" %}
+    <h4>Creá tu curso</h4>
+    <form action="{% url 'Course creation' %}" method="GET">
+        Nombre del curso: <input type="text" class="inp" name="name" ><br>
+        Descripción del curso: <textarea maxlength="50" name="description" class="inp"></textarea><br>
+        <input type="hidden" name="id" value="{{company_id}}"><br>
+        <input type="submit" id="iin" value="CREAR CURSO">
+    </form>
+    {% include "footer.html" %}
+    
+</body>
+</html>

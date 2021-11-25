@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Generador de certificados de asistencia y cursos - Cursos</title>
+</head>
+<body>
+    {% include "header.html" %}
+    <h4>PASO 2: ELEGIR CURSO</h4>
+    <h4>Acciones sobre tus cursos</h4>
+    <ul id="lists">    
+        {% if courses %}
+                {% for course in courses %}     
+                    <li id="li_course_{{course.id}}" class="li_no_listed_courses">
+                        {{course.name}} <a href="{% url 'Choose signee'%}?id={{course.id}}">ELEGIR</a> | <a href="{% url 'Modify course'%}?id={{course.id}}">MODIFICAR</a> | <a href="#" onclick="confirm_course_deletion({{course.id}})">ELIMINAR</a>
+                    </li>
+                {% endfor %}
+        {% else %}
+            <p id="no_listed_courses">No hay cursos creados.</p>
+        {% endif %}
+    </ul>
+    <h4>Creá un curso</h4>
+           <p>Click <a href="{% url 'Create course' %}?id={{company_id}}">acá</a> para crear un curso.</p>
+    <h4>Tus cursos eliminados</h4>
+        <ul id="lists2">    
+            {% if courses_not_active %}
+                {% for course in courses_not_active %}
+                    <li id="li_deleted_course_{{course.id}}" class="li_deleted_courses">
+                        {{course.name}} <a href="#" onclick="confirm_course_reactivation({{course.id}})">REACTIVAR</a> <br>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <p id="none_deleted_courses">No hay cursos eliminados.</p>
+            {% endif %}
+        </ul>
+    <script>
+        //DELETE COURSE
+        function confirm_course_deletion(course_id){
+                if (confirm("¿Seguro querés eliminar el curso?")){
+                    $.ajax({
+                        url: "{% url 'Delete course confirmation'%}?id="+course_id,
+                        type: 'GET',
+                        success: function(response){
+                            $("#li_course_"+course_id).remove();
+                            $("#none_deleted_courses").remove();
+                            alert("El curso se eliminó exitosamente");
+                            html = '<li id="li_deleted_course_'+response['id']+'" class="li_deleted_courses">'+response['name']+" "+'<a href="#" onclick="confirm_course_reactivation('+response['id']+')">REACTIVAR</a> </li>'                            
+                            $("ul#lists2").append(html);
+                            html1 = '<p id="no_listed_courses">No hay cursos creados.</p>'
+                            if ($(".li_no_listed_courses").length == 0){
+                                    $("ul#lists").html(html1)
+                            }
+                        }
+                    });
+                }
+        }
+        //COURSE REACTIVATION
+        function confirm_course_reactivation(course_id){
+                if (confirm("¿Seguro querés reactivar el curso?")){
+                    $.ajax({
+                        url: "{% url 'Reactivate course'%}?id="+course_id,
+                        type: 'GET',
+                        success: function(response){
+                            $("#li_deleted_course_"+course_id).remove()
+                            $("#no_listed_courses").remove();
+                            alert("El curso se reactivó exitosamente");
+                            html = '<li id="li_course_'+response['id']+'" class="li_no_listed_courses">'+response['name']+" "+'<a href="{% url "Choose signee"%}?id='+response['id']+'">ELEGIR</a> | <a href="{% url "Modify course"%}?id='+response['id']+'">MODIFICAR</a> | <a href="#" onclick="confirm_course_deletion('+response['id']+')">ELIMINAR</a>'
+                            $("ul#lists").append(html);
+                            html2 = '<p id="none_deleted_courses">No hay cursos eliminados.</p>'
+                            if ($(".li_deleted_courses").length == 0){
+                                    $("ul#lists2").html(html2)
+                            }
+                        }
+                    });
+                }
+        }  
+            
+    </script>
+    {% include "footer.html" %}
+
+</body>
+</html>

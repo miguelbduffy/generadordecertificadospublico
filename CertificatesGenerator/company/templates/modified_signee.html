@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Generador de certificados de asistencia y cursos - Firmante modificado</title>
+</head>
+<body>
+    {% include "header.html" %}
+    <h4>El firmante ha sido modificado. Si no se redirige al listado de firmantes en menos de 5 segundos, hacé click <a href="{%url 'Choose signee' %}?id={{modify_signee_db.course.id}}">acá</a></h4>
+    <script>
+        setTimeout(function () {
+            location.href = "{%url 'Choose signee' %}?id={{modify_signee_db.course.id}}"
+            }, 3000);
+    </script>
+    {% include "footer.html" %}
+
+</body>
+</html>
