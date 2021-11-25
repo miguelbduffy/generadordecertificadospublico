@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-cab2ve$&@3wis($5*65c(#v@#&+-sx3vfl9c4473z)$2j-1y8c'
+SECRET_KEY = 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -88,26 +88,6 @@ DATABASES = {
 }
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'dataforcertificates',
-#         'USER':'postgres',
-#         'PASSWORD':'pinamar',
-#         'HOST':'127.0.0.1',
-#         'DATABASE':'5432',
-#     }
-# }
-# import dj_database_url
-# from decouple import config
-
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default=config('DATABASE_URL')
-#     )
-# }
-
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend'
@@ -116,7 +96,7 @@ AUTHENTICATION_BACKENDS = [
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
-EMAIL_PASSWORD='Argentina7748?'
+EMAIL_PASSWORD=
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -177,9 +157,9 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-GS_BUCKET_NAME = 'stone-arch-322820.appspot.com'
-GS_PROJECT_ID="stone-arch-322820"
+DEFAULT_FILE_STORAGE =
+GS_BUCKET_NAME = 
+GS_PROJECT_ID=
 MEDIA_URL = 'https://storage.googleapis.com/{}/'.format(GS_BUCKET_NAME)
 MEDIA_ROOT = "media/"
 UPLOAD_ROOT = 'media/uploads/'
