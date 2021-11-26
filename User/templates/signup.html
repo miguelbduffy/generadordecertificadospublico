@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de certificados de asistencia y cursos - Registrate</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <style>
+        #in{
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .inp{
+            margin-top: 3px;
+            margin-bottom: 3px;
+        }
+    </style>
+</head>
+<body>
+    {% include "header.html" %}
+    <h4>Registro</h4>
+
+    <form>
+        Nombre: <input type="text" class="inp" name="first_name" id="first_name" required><br>
+        Apellido: <input type="text" class="inp" name="last_name" id="last_name" required><br>
+        Email: <input type="email" class="inp" name="email" id="email" required><br>
+        Contraseña: <input type="password" class="inp" name="password" id="pass1" required><br>
+        La contraseña debe tener entre 8 y 20 caracteres, por lo menos una mayúscula, una minúscula, un número y un caracter de estos ,.!@#$%?. La contraseña no debe ser la misma que usás para tu email.<br>
+        Repetí la contraseña <input type="password" class="inp" name="password" id="pass2" required><br>
+        <input type="button" id="in" value="REGISTRARME" onclick="validarForm()"><br>
+    </form>
+    <br>
+    
+    <script>
+
+        function validarEmail(email){
+            var filter = /[\w-\.]{1,}@([\w-]{1,}\.)*([\w-]{1,}\.)[\w-]{2,4}/;
+            return filter.test(email)
+            }
+
+        function validatePassword(password){
+            if (password.length < 8 || password.length > 20) {
+                alert("La contraseña tiene que tener por lo menos 8 caracteres y menos de 21.")
+                return false;
+            }
+            else if ($("#pass1").val() != $("#pass2").val()){
+                alert("La contraseña no coincide")
+                return false;
+            } else if (!/[A-Z]/.test(password)) {
+                alert("La contraseña tiene que tener por lo menos una mayúscula.")
+                return false;
+            } else if (!/[a-z]/.test(password)) {
+                alert("La contraseña tiene que tener por lo menos una minúscula.")
+                return false;
+            } else if (!/[0-9]/.test(password)) {
+                alert("La contraseña tiene que tener por lo menos un número.")
+                return false;
+            } else if (!/[,.!@#$%?]/.test(password)) {
+                alert("La contraseña tiene que tener por lo menos un caracter especial: ,.!@#$%?")
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function validarForm(){
+            if($("#email").val() == '' || !validarEmail( $("#email").val() )){
+                alert("Por favor ingresá un mail válido")
+                return false;
+            }
+            if(!validatePassword($("#pass1").val())){
+                return false;
+            }
+            
+            $.ajax({
+                    url: "{% url 'User has been registered' %}",
+                    type: "post",
+                    data:{
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                        first_name:$("#first_name").val(),
+                        last_name:$("#last_name").val(),
+                        email:$("#email").val(),
+                        password:$("#pass1").val(),
+                    },
+                    success: function(result){                         
+                        if(result['success']){
+                            window.location.href = "{% url 'Activate account' %}?email="+result['email']+"&id="+result['id']
+                            return true
+                        }
+                        alert(result['error_message']);
+                            return false
+                            },
+                        })
+        
+                
+            
+        } ;
+                
+
+
+            
+            
+        
+    </script>
+
+    <!-- <h2>Registrate con tu cuenta de Gmail haciendo click <a href=http://127.0.0.1:8000/accounts/google/login/?process=login>acá</a></h2>
+        
+    <p>Gmail</p> -->
+
+    <!-- <h2>Si ya tenés usuario ingresá desde <a href=http://127.0.0.1:8000/login/>acá</a></h2> -->
+    {% include "footer.html" %}
+</body>
+</html>

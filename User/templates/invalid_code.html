@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Generador de certificados de asistencia y cursos - Código inválido</title>
+</head>
+<body>
+    {% include "header.html" %}
+    <h4>El código es inválido. Si no se redirige a la página de activación de la cuentaen menos de 5 segundos, hacé click <a href="{% url 'Activate account' %}">acá</a></h4>
+    <script>
+        setTimeout(function () {
+            location.href = '{% url 'Activate account' %}'
+            }, 3000);
+    </script>
+    {% include "footer.html" %}
+</body>
+</html>

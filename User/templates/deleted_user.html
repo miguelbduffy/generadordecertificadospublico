@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de certificados de asistencia y cursos - Usuario eliminado</title>
+</head>
+<body>
+    {% include "header.html" %}
+
+    <h4>Tu usuario ha sido eliminado.</h4>
+    
+    <p>Reactivalo haciendo click <b><a href="{% url 'Reactivate user' %}?id={{profile.id}}">acá</a></b>.</p>
+    {% include "footer.html" %}
+
+</body>
+</html>

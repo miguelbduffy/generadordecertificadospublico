@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de certificados de asistencia y cursos - Activar cuenta</title>
+</head>
+<body>
+    {% include "header.html" %}
+    <h4>El usuario no ha sido verificado. En tu mail está tu código de verificación. Si 
+        no te llegó, hacé click <a href="../resend_account_activation/?id={{profile.id}}">acá</a> para que te enviemos otro.
+    </h4>
+    <h4>Validá tu mail:</h4>
+    <form action="{% url 'Account activation' %}" method="POST">{% csrf_token %}
+        <p>{{profile.user.email}}</p>
+        Email <input type="hidden" name="email" value="{{profile.user.email}}">
+        Código de activación <input type="number" name="activation_code"> <br>
+        <input type="submit" value="ACTIVAR CUENTA">  <br>
+    </form>
+    {% include "footer.html" %}
+</body>
+</html>

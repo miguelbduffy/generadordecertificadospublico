@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Generador de certificados de asistencia y cursos - Panel de usuario</title>
+    </style>
+</head>
+<body>
+    {% include "header.html" %}
+    {% if request.user.is_authenticated %}
+        <p>¡Hola {{ request.user.first_name }}!</p>
+    {% endif %}
+    <h4>Acciones que podés hacer sobre tu usuario: </h4>
+    <p><a href="#" onclick="confirm_user_deletion({{request.user.id}})">ELIMINAR USUARIO</a></p>
+    <p><a href="{% url 'Modify user' %}?id={{request.user.id}}">MODIFICAR USUARIO</a></p>
+    {{context}}
+    
+    <h4>¿CÓMO CREAR Y ENVIAR CERTIFICADOS DE ASISTENCIA O CURSOS EN FORMA MASIVA A TRAVÉS DE UNA PLANILLA DE CÁLCULO DE EXCEL O GOOGLE SPREADSHEET?</h4>
+    <p>
+        Tenés que seguir 4 pasos (te llevará  menos de 5 minutos): <br>
+        1. Elegí tu empresa;<br>
+        2. Cargá los datos del curso;<br>
+        3. Cargá los datos del firmante (puede ser hasta dos);<br>
+        4. Subí la planilla de cálculo.<br>
+        ¡Los estudiantes o asistentes recibirán en su mail el certificado!<br>
+    </p>
+    
+    <h4>PASO 1: ELEGIR UNA EMPRESA</h4>
+    
+    <h4>Acciones sobre tus empresas</h4>
+    <ul id="active_companies">
+        {% if companies %}
+            
+                {% for company in companies %}
+                    <li id="li_company_{{company.id}}" class="li_no_listed_companies">
+                        {{company.name}} <a href="{% url 'Choose course' %}?id={{company.id}}">ELEGIR</a> | <a href="{% url 'Modify company' %}?id={{company.id}}">MODIFICAR</a> | <a href="#" onclick="confirm_company_deletion({{company.id}})">ELIMINAR</a>               
+                    </li>
+                {% endfor %}
+            
+        {% else %}
+            <p id="no_listed_companies">No hay empresas creadas.</p>
+        {% endif %}
+            </ul>
+        <h4>Creá una empresa</h4>
+        <p>Creá una empresa desde <a href="{% url 'Create company' user_id=request.user.id %}"><b>acá</b>.</a></p>
+    
+        
+        <h4>Tus empresas eliminadas</h4>
+        <ul id="lists">
+            {% if companies_not_active %}
+                {% for company in companies_not_active %}
+                        <li id="li_deleted_company_{{company.id}}" class="li_company_deleted">
+                            {{company.name}} <a href="#" onclick="confirm_company_reactivation({{company.id}})">REACTIVAR</a> <br>
+                        </li>
+                {% endfor %}
+            {% else %}
+                    <p id="none_deleted_companies">No hay empresas eliminadas.</p>
+            {% endif %}
+        </ul>
+        <script>
+            //USER DELETION
+            function confirm_user_deletion(user_id){              
+                    if (confirm("¿Seguro querés borrar el usuario?")){
+                        $.ajax({
+                            url: "{% url 'Delete user'%}?id="+user_id,
+                            type: 'GET',
+                            success: function(response){
+                                alert("El usuario se eliminó exitosamente");
+                                window.location.href = "http://127.0.0.1:8000/logout";
+                            }
+                        });
+                    }
+            }
+            //COMPANY DELETION
+            function confirm_company_deletion(company_id){
+                    if (confirm("¿Seguro querés borrar la empresa?")){
+                        $.ajax({
+                            url: "{% url 'Delete company'%}?id="+company_id,
+                            type: 'GET',
+                            success: function(response){
+                                $("#li_company_"+company_id).remove();
+                                $("#none_deleted_companies").remove();
+                                alert("La empresa se eliminó exitosamente");
+                                html = '<li id="li_deleted_company_'+response['id']+'" class="li_company_deleted">'+response['name']+" "+'<a href="#" onclick="confirm_company_reactivation('+response['id']+')">REACTIVAR</a> </li>'                                                        
+                                $("ul#lists").append(html);
+                                html1 = '<p id="no_listed_companies">No hay empresas creadas.</p>'
+                                if ($(".li_no_listed_companies").length == 0){
+                                        $("ul#active_companies").html(html1)
+                                }
+                                
+                            }
+                        });
+                    }
+            }
+            //COMPANY REACTIVATION
+            function confirm_company_reactivation(company_id){
+                    if (confirm("¿Seguro querés reactivar la empresa?")){
+                        $.ajax({
+                            url: "{% url 'Reactivate company'%}?id="+company_id,
+                            type: 'GET',
+                            success: function(response){
+                                $("#li_deleted_company_"+company_id).remove();
+                                $("#no_listed_companies").remove();
+                                alert("La empresa se reactivó exitosamente");
+                                html = '<li id="li_company_'+response['id']+'" class="li_no_listed_companies">'+response['name']+" "+'<a href="{% url "Choose course"%}?id='+response['id']+'">ELEGIR</a> | <a href="{% url "Modify company"%}?id='+response['id']+'">MODIFICAR</a> | <a href="#" onclick="confirm_company_deletion('+response['id']+')">ELIMINAR</a></li>'
+                                $("ul#active_companies").append(html);
+                                html2 = '<p id="none_deleted_companies">No hay empresas eliminadas.</p>'
+                                if ($(".li_company_deleted").length == 0){
+                                        $("ul#lists").html(html2)
+                                }
+                            }
+                        });
+                    }
+            }  
+        </script>
+    {% include "footer.html" %}
+</body>
+</html>

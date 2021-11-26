@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Generador de certificados de asistencia y cursos - Usuario reactivado</title>
+</head>
+<body>
+    {% include "header.html" %}
+    <h4>El usuario ha sido reactivado. Si no se redirige al login en menos de 10 segundos, hacé click <a href="http://127.0.0.1:8000/login/">acá</a></h4>
+    <script>
+        setTimeout(function () {
+            location.href = "/login/"
+            }, 5000);
+    </script>
+    {% include "footer.html" %}
+</body>
+</html>

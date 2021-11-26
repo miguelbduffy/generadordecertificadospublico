@@ -1,0 +1,23 @@
+  <!-- FOOTER -->
+  <footer class="footer py-5">
+    <div class="container">
+         <div class="row">
+          <hr size="1" width="100%" color="black">  
+
+              <div class="col-lg-12 col-12">
+               {% if request.user.is_authenticated %}
+                    <p class="copyright-text text-center"><a href="javascript:history.back()"><b>IR ATRÁS</b></a></p>
+                    <p class="copyright-text text-center"><a href="/dashboard/{{request.user.id}}"><b>IR AL PANEL DE INICIO</b></a></p>
+                    <p class="copyright-text text-center"><a href="{% url 'FAQ' %}"><b>PREGUNTAS FRECUENTES</b></a></p>
+                    <p class="copyright-text text-center"><a href="/logout"><b>CERRAR SESIÓN</b></a></p>
+               {% else %}
+               <p class="copyright-text text-center"><a href="/"><b>IR A LA PÁGINA DE INICIO</b></a> o <a href="../login/"><b>INICIÁ SESIÓN</b></a>.</p>
+               {% endif %}
+                  <p class="copyright-text text-center">Este es un sitio de práctica hecho por <a href="https://www.linkedin.com/in/mbduffy/" target="_blank">Miguel Duffy</a>. El código está subido a GitHub en este link.</p>
+                  <p class="copyright-text text-center">Si ves algún error o algo que no cuadra, te agradecería me lo comentaras a <a href="mailto:miguelbduffy@gmail.com">miguelbduffy@gmail.com</a>.</p>
+                  <p class="copyright-text text-center">Template de <a rel="nofollow" href="https://www.facebook.com/tooplate" target="_blank">Tooplate</a> modificado por Miguel Duffy.</p>
+              </div>
+              
+         </div>
+    </div>
+</footer>
